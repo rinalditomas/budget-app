@@ -1,0 +1,26 @@
+.addBtn{
+    border: 1px solid lightgray;
+    height: 5rem;
+    width: 5rem;
+    border-radius: 10px;
+    font-size: 1.5rem;
+    font-weight: bolder;
+    margin: 2rem;
+    transition: transform 450ms;
+    cursor: pointer;
+}
+.addBtn:hover{
+    
+    transform: scale(1.1);
+    
+}
+.income{
+    background-color: lightgreen;
+    border:lightgreen ;
+    color: green;
+}
+.spending{
+    background-color: lightsalmon;
+    border:lightsalmon ;
+    color: red;
+}

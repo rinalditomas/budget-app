@@ -1,0 +1,108 @@
+.expenseForm-backgroud {
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.1);
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.expenseForm-container {
+  width: 30rem;
+  height: 40rem;
+  -webkit-box-shadow: 4px 9px 17px -5px rgba(0, 0, 0, 1);
+  -moz-box-shadow: 4px 9px 17px -5px rgba(0, 0, 0, 1);
+  box-shadow: 4px 9px 17px -5px rgba(0, 0, 0, 1);
+  background: #fff;
+  color: #000;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  
+  z-index: 10;
+  border-radius: 10px;
+}
+.form-header{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    background-color: lightpink;
+    color: white;
+    margin-bottom: 2rem;
+    border-radius: 10px 10px 25px 25px;
+}
+.form-header h1{
+  margin-left: auto ;
+  margin-right: auto;
+  font-size: 2.5rem;
+font-weight: bolder;
+}
+.fa-times{
+    cursor: pointer;
+    margin-top: 0.5rem;
+    margin-right: 1rem;
+}
+.categories-container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.categories-container p{
+    margin-left: 1rem;
+}
+.categories {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: center;
+  align-items: center;
+}
+.fas,.fab {
+  font-size: 2rem;
+}
+.logo-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1rem;
+  cursor: pointer;
+  transition: transform 450ms;
+}
+.logo-container:hover{
+    transform: scale(1.05);
+}
+.logo-container p {
+  font-size: 0.5rem;
+}
+.input-container{
+    border: 1px solid lightgrey;
+    padding: 0.5rem;
+    border-radius: 10px;
+    width: 20rem;
+    margin-bottom: 1rem;
+}
+.input-container input, textarea,select{
+    outline: none;
+    border: none;
+    width: 18rem;
+
+}
+.input-container input:focus, textarea:focus,select:focus{
+    outline: none;
+    border: none;
+    width: 18rem;
+
+}
+.input-container .fas{
+    font-size: 1rem;
+    margin-right: 0.5rem;
+}
+#amount-input::-webkit-outer-spin-button,
+#amount-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}

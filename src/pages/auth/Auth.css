@@ -73,3 +73,11 @@ margin-bottom: 2rem;
 .form-text h1{
     margin-bottom: -1rem;
 }
+.error{
+    font-size: 0.8rem;
+    background-color: lightpink;
+    padding: 0.5rem;
+    border-radius: 10px;
+    color: red;
+    font-size: bolder;
+}
