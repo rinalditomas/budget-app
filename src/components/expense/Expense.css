@@ -1,6 +1,28 @@
 .expense-container{
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     width: 80%;
     margin: auto;
+}
+.main-information{
+    display: flex;
+    justify-content: space-between;
+}
+.category-inf{
+    display: flex;
+    align-items: center;
+}
+.down{
+    transform:rotate(180deg);
+}
+
+.sub-information{
+    display: flex;
+    justify-content: space-between;
+    display: none;
+}
+.show{
+    display: flex;
+    justify-content: space-between;
+    
 }

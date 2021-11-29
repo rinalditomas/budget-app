@@ -30,7 +30,7 @@ function App() {
 
   return (
     <div className="App">
-    {user ? <Main signOutUser={signOutUser}/> : <NotLogged/> }
+    {user ? <Main signOutUser={signOutUser} user={user}/> : <NotLogged/> }
     </div>
   );
 }

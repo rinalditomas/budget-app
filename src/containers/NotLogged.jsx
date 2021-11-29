@@ -24,7 +24,7 @@ export const NotLogged = () => {
     const registerNewUser = async () => {
       const { password1, password2, email } = input;
       try {
-        if (!email || !password2 || password1) {
+        if (!email || !password2 || !password1) {
           setError("Please, fill the form");
         }
         if (password1 != password2) {
