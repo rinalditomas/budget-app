@@ -50,9 +50,9 @@ export const ExpensesCategories = ({handleChange}) => {
 export const IncomeCategories = ({handleChange}) => {
   return (
     <>
-      <div className="logo-container"name='category' value= 'Salarie'onClick={handleChange}>
-        <i className="fas fa-coins"name='category' value= 'Salarie'></i>
-        <p name='category' value= 'Salarie'>Salarie</p>
+      <div className="logo-container"name='category' value= 'Salary'onClick={handleChange}>
+        <i className="fas fa-coins"name='category' value= 'Salary'></i>
+        <p name='category' value= 'Salary'>Salarie</p>
       </div>
       <div className="logo-container" name='category' value= 'Investment' onClick={handleChange}>
         <i className="fab fa-bitcoin" name='category' value= 'Investment'></i>

@@ -4,6 +4,7 @@ import {
   setDoc,
   collection,
   onSnapshot,
+  deleteDoc,
   updateDoc,
   getDocs,
   getDoc,
@@ -107,17 +108,22 @@ export const Home = ({ signOutUser }) => {
     });
   };
 
+  const deleteExpense= async (id)=>{
+    const expenseDoc = doc(db,'users',user.uid,'money', id)
+    await deleteDoc(expenseDoc)
+}
+
   return (
     <div className="home-container">
       <h1>HOME</h1>
       <button onClick={signOutUser}>Logout</button>
       <div className="middle">
         <div className="total-container">
-         {total && <Total total={total} />}
+         <Total total={total || 0} />
         </div>
         <div className="expenses-container">
           {expenses.map((expense) => (
-            <Expense expense={expense} key={expense.id} />
+            <Expense expense={expense} key={expense.id} deleteExpense={deleteExpense} />
           ))}
         </div>
       </div>
