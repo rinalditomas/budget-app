@@ -20,10 +20,7 @@ const newExpenseForm = ({
     <div className="expenseForm-backgroud" ref={formRef} onClick={closeForm}>
       <div className="expenseForm-container">
         <div
-          className="form-header"
-          style={{
-            backgroundColor: formType === "Income" ? "#5DC460" : "#F44336",
-          }}
+          className={formType === 'Income' ? 'form-header green' : 'form-header red'}
         >
           <i className="fas fa-times" onClick={openForm}></i>
           <h1>{formType}</h1>

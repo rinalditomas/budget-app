@@ -4,6 +4,7 @@ import {
   setDoc,
   collection,
   onSnapshot,
+  updateDoc,
   getDocs,
   getDoc,
 } from "firebase/firestore";
@@ -13,6 +14,7 @@ import { AddButton } from "../../components/addButton/AddButton";
 import Expense from "../../components/expense/Expense";
 import NewExpenseForm from "../../components/newExpenseForm/NewExpenseForm";
 import { db } from "../../firebaseConfig";
+import Total from "../../components/total/Total";
 
 export const Home = ({ signOutUser }) => {
   const auth = getAuth();
@@ -23,21 +25,25 @@ export const Home = ({ signOutUser }) => {
   const [showForm, setShowForm] = useState(false);
   const [formType, setFormType] = useState("");
   const [expenses, setExpenses] = useState([]);
+  const [total, setTotal] = useState();
   const formRef = useRef();
   const userExpenses = collection(db, "users", user.uid, "money");
-  
+  const totalRef = collection(db, "users");
 
   useEffect(() => {
-    const getData = () =>{
-        onSnapshot(userExpenses,(snapshot)=>{
-            setExpenses(snapshot.docs.map(exp=> ({ ...exp.data(), id: exp.id })))
-        })
-        
+    const getData = () => {
+      onSnapshot(userExpenses, (snapshot) => {
+        setExpenses(
+          snapshot.docs.map((exp) => ({ ...exp.data(), id: exp.id }))
+        );
+      });
+      onSnapshot(totalRef, (total) => {
+        setTotal(total.docs.map((info) => info.data().total));
+      });
+    };
 
+    getData();
 
-    }
-
-    getData()
     // const getUsers = async () => {
     //   const getExpenses = await getDocs(userExpenses);
     //   const getIncome = await getDocs(userIncome);
@@ -57,7 +63,6 @@ export const Home = ({ signOutUser }) => {
       const value = e.target.value || e.target.getAttribute("value");
       setInput({ ...input, [key]: value });
     } else {
-        
       const key = "date";
       const value = e;
       setInput({ ...input, [key]: value });
@@ -74,32 +79,49 @@ export const Home = ({ signOutUser }) => {
     }
   };
   const addNewItem = async () => {
-      setShowForm(false)
-      setFormType('')
-    const docRef = doc(collection(db, "users", user.uid, 'money'));
-    if(!input.date){
-      const  item = {...input,date:new Date()}
-      const newUser = await setDoc(docRef, item);
+    let texpense = 0;
+    let tincome = 0;
 
-    }else{
-        const newUser = await setDoc(docRef, input);
-    }
+    expenses.forEach((item) => {
+      if (item.type === "Income") tincome += Number(item.amount);
+      if (item.type === "Expense") texpense += Number(item.amount);
+    });
     
+    if (input.type === "Income") tincome += Number(input.amount);
+    if (input.type === "Expense") texpense += Number(input.amount);
+    setShowForm(false);
+    setFormType("");
+    const docRef = doc(collection(db, "users", user.uid, "money"));
+    const totalRef = doc(db, "users", user.uid);
+    if (!input.date) {
+      const item = { ...input, date: new Date() };
+      const newUser = await setDoc(docRef, item);
+    } else {
+      const newUser = await setDoc(docRef, input);
+    }
+    const newTotal = await setDoc(totalRef, {
+      total: {
+        totalIncome: tincome,
+        totalExpense: texpense,
+      },
+    });
   };
 
   return (
     <div className="home-container">
       <h1>HOME</h1>
       <button onClick={signOutUser}>Logout</button>
-      
-
-      <div className="expenses-container">
-          {
-              expenses.map(expense=>(
-                <Expense expense={expense} key={expense.id}/>
-              ))
-          }
+      <div className="middle">
+        <div className="total-container">
+         {total && <Total total={total} />}
+        </div>
+        <div className="expenses-container">
+          {expenses.map((expense) => (
+            <Expense expense={expense} key={expense.id} />
+          ))}
+        </div>
       </div>
+
       <div className="addBtn-container">
         <AddButton openForm={openForm} />
         <AddButton type={"income"} openForm={openForm} />

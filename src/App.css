@@ -4,3 +4,15 @@ body {
   font-family: "Poppins", sans-serif;
   height: 100%;
 }
+.green{
+  background-color:#5DC460 ;
+}
+.lightgreen{
+ background-color: #dbeddc;
+}
+.lightred{
+ background-color: #ffdfd5; 
+}
+.red{
+  background-color:#F44336 ;
+}
