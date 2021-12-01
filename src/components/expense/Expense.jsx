@@ -17,7 +17,7 @@ const Expense = ({expense,deleteExpense}) => {
                 </div>
                 <div className="expense-options"> 
                     <h1 >{`$${amount}`}</h1>
-                    <i className="far fa-trash-alt" onClick={()=>deleteExpense(id)}></i>
+                    <i className="far fa-trash-alt" onClick={()=>deleteExpense(expense)}></i>
                     <i className="far fa-edit"></i>
                 </div>
            

@@ -26,10 +26,14 @@ export const Home = ({ signOutUser }) => {
   const [showForm, setShowForm] = useState(false);
   const [formType, setFormType] = useState("");
   const [expenses, setExpenses] = useState([]);
-  const [total, setTotal] = useState();
+  const [total, setTotal] = useState({
+    totalIncome: 0,
+    totalExpense: 0,
+  });
   const formRef = useRef();
   const userExpenses = collection(db, "users", user.uid, "money");
   const totalRef = collection(db, "users");
+
 
   useEffect(() => {
     const getData = () => {
@@ -39,22 +43,11 @@ export const Home = ({ signOutUser }) => {
         );
       });
       onSnapshot(totalRef, (total) => {
-        setTotal(total.docs.map((info) => info.data().total));
+        total.docs.map((info) => setTotal(info.data()));
       });
     };
 
     getData();
-
-    // const getUsers = async () => {
-    //   const getExpenses = await getDocs(userExpenses);
-    //   const getIncome = await getDocs(userIncome);
-
-    //   setExpenses(
-    //     getExpenses.docs.map((exp) => ({ ...exp.data(), id: exp.id }))
-    //   );
-    //   setIncomes(getIncome.docs.map((inc) => ({ ...inc.data(), id: inc.id })));
-    // };
-    // getUsers();
   }, []);
 
   const handleChange = (e) => {
@@ -87,7 +80,7 @@ export const Home = ({ signOutUser }) => {
       if (item.type === "Income") tincome += Number(item.amount);
       if (item.type === "Expense") texpense += Number(item.amount);
     });
-    
+
     if (input.type === "Income") tincome += Number(input.amount);
     if (input.type === "Expense") texpense += Number(input.amount);
     setShowForm(false);
@@ -101,17 +94,29 @@ export const Home = ({ signOutUser }) => {
       const newUser = await setDoc(docRef, input);
     }
     const newTotal = await setDoc(totalRef, {
-      total: {
-        totalIncome: tincome,
-        totalExpense: texpense,
-      },
+      totalIncome: tincome,
+      totalExpense: texpense,
     });
   };
 
-  const deleteExpense= async (id)=>{
-    const expenseDoc = doc(db,'users',user.uid,'money', id)
-    await deleteDoc(expenseDoc)
-}
+  const deleteExpense = async (expense) => {
+    const {amount, id,type} = expense
+    const {totalIncome, totalExpense}= total
+
+    const totalRef = doc(db, "users", user.uid);
+    if (type === "Income") {
+      totalIncome = totalIncome - amount;
+    }
+    if (type === "Expense") {
+      totalExpense = totalExpense - amount;
+    }
+    const expenseDoc = doc(db, "users", user.uid, "money", id);
+    await deleteDoc(expenseDoc);
+    const newTotal = await setDoc(totalRef, {
+      totalIncome: totalIncome,
+      totalExpense: totalExpense,
+    });
+  };
 
   return (
     <div className="home-container">
@@ -119,11 +124,15 @@ export const Home = ({ signOutUser }) => {
       <button onClick={signOutUser}>Logout</button>
       <div className="middle">
         <div className="total-container">
-         <Total total={total || 0} />
+          <Total total={total || 0} />
         </div>
         <div className="expenses-container">
           {expenses.map((expense) => (
-            <Expense expense={expense} key={expense.id} deleteExpense={deleteExpense} />
+            <Expense
+              expense={expense}
+              key={expense.id}
+              deleteExpense={deleteExpense}
+            />
           ))}
         </div>
       </div>
