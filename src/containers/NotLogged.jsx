@@ -42,7 +42,7 @@ export const NotLogged = () => {
           }
         }
       } catch (error) {
-        console.log(error.message);
+      
         if (error.code === "auth/email-already-in-use")
           setError("This email is already in use by another account");
         if (error.code === "auth/missing-email")
@@ -66,13 +66,13 @@ export const NotLogged = () => {
  
           setError(null);
           const user = await signInWithEmailAndPassword(auth,email,password)
-          console.log(user)
+    
           
         }
          
         
       } catch (error) {
-        console.log(error.message)
+    
         if (error.code === "auth/wrong-password") setError('Incorrect password, please try again')
         if (error.code === "auth/invalid-email") setError('The email address is badly formatted')
         if (error.code === "auth/user-not-found") setError('No user was found with that email')

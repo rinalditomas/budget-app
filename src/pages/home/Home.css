@@ -19,7 +19,7 @@
 }
 .expenses-container{
   width: 45%;
-  height: 65vh;
+  height: 70vh;
   overflow-y: scroll;
   background-color: white;
   border-radius: 20px;
@@ -31,10 +31,21 @@
   display: none;
 
 }
+.lightgreen, .lightred{
+  transition: transform 450ms;
+}
 
+.lightgreen:hover{
+  color: green;
+  transform: scale(1.05);
+}
+.lightred:hover{
+  color: red;
+  transform: scale(1.05);
+}
 .total-container{
   width: 45%;
-  height: 65vh;
+  height: 70vh;
   border-radius: 20px;
   box-shadow: 4.0px 8.0px 8.0px hsl(0deg 0% 0% / 0.38);
   background-color: white;

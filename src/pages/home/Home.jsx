@@ -23,9 +23,11 @@ export const Home = ({ signOutUser }) => {
   const [input, setInput] = useState({
     type: "",
   });
+  const [edit,setEdit]= useState(false)
   const [showForm, setShowForm] = useState(false);
   const [formType, setFormType] = useState("");
   const [expenses, setExpenses] = useState([]);
+  const [selected, setSelected]= useState()
   const [total, setTotal] = useState({
     totalIncome: 0,
     totalExpense: 0,
@@ -63,6 +65,7 @@ export const Home = ({ signOutUser }) => {
     }
   };
   const openForm = (type) => {
+ 
     setShowForm((prev) => !prev);
     setFormType(type);
   };
@@ -70,6 +73,7 @@ export const Home = ({ signOutUser }) => {
     if (formRef.current === e.target) {
       setShowForm(false);
       setFormType("");
+      setEdit(false)
     }
   };
   const addNewItem = async () => {
@@ -102,22 +106,71 @@ export const Home = ({ signOutUser }) => {
   const deleteExpense = async (expense) => {
     const {amount, id,type} = expense
     const {totalIncome, totalExpense}= total
-
+    const expenseDoc = doc(db, "users", user.uid, "money", expense.id);
     const totalRef = doc(db, "users", user.uid);
-    if (type === "Income") {
-      totalIncome = totalIncome - amount;
+    if (expense.type === "Income") {
+      total.totalIncome = total.totalIncome - expense.amount;
     }
-    if (type === "Expense") {
-      totalExpense = totalExpense - amount;
+    if (expense.type === "Expense") {
+      total.totalExpense = total.totalExpense - amount;
     }
-    const expenseDoc = doc(db, "users", user.uid, "money", id);
+    
     await deleteDoc(expenseDoc);
     const newTotal = await setDoc(totalRef, {
-      totalIncome: totalIncome,
-      totalExpense: totalExpense,
+      totalIncome: total.totalIncome,
+      totalExpense: total.totalExpense,
     });
   };
+  const startEdit = (expense)=>{
+    setEdit(true)
+    openForm(expense.type)
+    setSelected(expense)
+  }
+  const finishEdit= ()=>{
 
+    setEdit(false)
+    setShowForm(false)
+  }
+
+const updateExpense =  async(selected)=>{
+ 
+  let editDoc = doc(db, "users", user.uid, "money", selected.id);
+  let diference = 0
+ 
+  finishEdit()
+  await updateDoc(editDoc,{
+    amount:input.amount || selected.amount,
+    date: input.date || selected.date,
+    note:input.note || selected.note,
+    category: input.category || selected.category,
+    type:selected.type,
+  })
+
+  //si existe amount en input
+  if(input.amount){
+    //si el tipo es 'income'
+    if (selected.type === "Income") {
+   
+    }
+    //si el tipo es expense
+    if (selected.type === "Expense") {
+     
+    }
+    
+    
+    const newTotal = await setDoc(totalRef, {
+      totalIncome: total.totalIncome,
+      totalExpense: total.totalExpense,
+    });
+/// si no existe amaount en input
+  }else{
+
+  }
+
+
+
+
+}
   return (
     <div className="home-container">
       <h1>HOME</h1>
@@ -132,6 +185,8 @@ export const Home = ({ signOutUser }) => {
               expense={expense}
               key={expense.id}
               deleteExpense={deleteExpense}
+              edit={edit}
+              startEdit={startEdit}
             />
           ))}
         </div>
@@ -150,6 +205,10 @@ export const Home = ({ signOutUser }) => {
           handleChange={handleChange}
           input={input}
           addNewItem={addNewItem}
+          selected={selected}
+          edit={edit}
+          finishEdit={finishEdit}
+          updateExpense={updateExpense}
         />
       ) : null}
     </div>
