@@ -135,6 +135,7 @@ export const Home = ({ signOutUser }) => {
 const updateExpense =  async(selected)=>{
  
   let editDoc = doc(db, "users", user.uid, "money", selected.id);
+  let totalRef = doc(db, "users", user.uid);
   let diference = 0
  
   finishEdit()
@@ -150,22 +151,43 @@ const updateExpense =  async(selected)=>{
   if(input.amount){
     //si el tipo es 'income'
     if (selected.type === "Income") {
-   
+      
+      if(input.amount > selected.amount){
+        diference = input.amount - selected.amount
+        const newTotal = await setDoc(totalRef, {
+          totalIncome: total.totalIncome + diference,
+          totalExpense: total.totalExpense,
+        });
+      }
+      if(input.amount < selected.amount){
+        diference =  selected.amount - input.amount 
+        const newTotal = await setDoc(totalRef, {
+          totalIncome: total.totalIncome - diference,
+          totalExpense: total.totalExpense,
+        });
+      }
+      
     }
     //si el tipo es expense
     if (selected.type === "Expense") {
+      if(input.amount > selected.amount){
+        diference = input.amount - selected.amount
+        const newTotal = await setDoc(totalRef, {
+          totalIncome: total.totalIncome,
+          totalExpense: total.totalExpense + diference,
+        });
+      }
+      if(input.amount < selected.amount){
+        diference =  selected.amount - input.amount 
+        const newTotal = await setDoc(totalRef, {
+          totalIncome: total.totalIncome,
+          totalExpense: total.totalExpense - diference,
+        });
+      }
      
     }
-    
-    
-    const newTotal = await setDoc(totalRef, {
-      totalIncome: total.totalIncome,
-      totalExpense: total.totalExpense,
-    });
-/// si no existe amaount en input
-  }else{
-
   }
+
 
 
 
