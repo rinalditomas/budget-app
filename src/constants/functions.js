@@ -1,16 +1,4 @@
-// const addNewItem = async (e) => {
-//   e.preventDefault();
-//   console.log(input.amount, input.category, input.notes);
-//   let item = {
-//     income: false,
-//     amount: input.amount,
-//     category: input.category,
-//     notes: input.notes,
-//     date: Date.now(),
-//   };
 
-//   await setDoc(doc(db, "expenses", "gastos"), { item });
-// };
 
 export const ExpensesCategories = ({handleChange}) => {
   return (
@@ -65,3 +53,9 @@ export const IncomeCategories = ({handleChange}) => {
     </>
   );
 };
+export const formatDate=(seconds,nanoseconds)=>{
+  return new Date(seconds * 1000 + nanoseconds/1000000).toISOString().split('T')[0]
+}
+export const  formatDate2 = (seconds,nanoseconds)=>{
+ return new Date(seconds * 1000 + nanoseconds/1000000)
+}
