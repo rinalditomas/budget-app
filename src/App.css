@@ -1,19 +1,37 @@
-
-body {
+* {
   margin: 0;
-  font-family: "Poppins", sans-serif;
+  padding: 0;
+}
+
+html,
+body {
   height: 100%;
-  background-color: #f9fafb;
 }
-.green{
-  background-color:#5DC460 ;
+body {
+  font-family: "Poppins", sans-serif;
+
 }
-.lightgreen{
- background-color: #dbeddc;
+.green {
+  background-color: #5dc460;
 }
-.lightred{
- background-color: #ffdfd5; 
+.lightgreen {
+  background-color: #dbeddc;
 }
-.red{
-  background-color:#F44336 ;
+.lightred {
+  background-color: #ffdfd5;
+}
+.red {
+  background-color: #f44336;
+}
+.incomes {
+  color: green;
+}
+.expenses {
+  color: red;
+}
+.text{
+  color: darkgray;
+}
+.icon{
+  color: rgb(138, 137, 137);
 }

@@ -1,25 +1,28 @@
-.t-container{
+.t-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  color: #1B264F;
+}
+.container {
+  width: 90%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.7rem;
+}
+.info-total{
     display: flex;
-
-}
-.container{
-    width: 90%;
-    height: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin-right: auto;
-    margin-left: auto;
-    font-size: 1rem;
+    flex-direction: column;
+    border-left: 1px solid lightgrey;
+    padding-left: 1.3rem;
+    margin-left: 0.5rem;
 }
 
-.incomes{
-    color: green;
-}
-.expenses{
-    color: red;
-}
-.total{
-    color: white;
-    border-radius: 20px;
+.far{
+    font-size: 2rem;
 }

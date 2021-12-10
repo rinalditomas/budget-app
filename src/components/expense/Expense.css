@@ -5,8 +5,9 @@
   margin: auto;
   margin-top: 1rem;
   margin-bottom: 1rem;
-  border-radius: 20px;
-  color: black;
+  color: #1B264F;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid lightgrey;
 }
 
 .expense-container h1 {
@@ -58,13 +59,17 @@
 }
 
 .sub-information {
-  display: none;
+  display: flex;
+  font-weight: lighter;
+  width: 90%;
   justify-content: space-between;
   margin-left: auto;
   margin-right: auto;
 }
 
-.show {
-  display: flex;
-  width: 80%;
+.font-green{
+  color: rgb(0, 202, 0);
+}
+.font-red{
+  color: rgb(216, 0, 0);
 }

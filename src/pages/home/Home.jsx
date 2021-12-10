@@ -16,6 +16,9 @@ import Expense from "../../components/expense/Expense";
 import NewExpenseForm from "../../components/newExpenseForm/NewExpenseForm";
 import { db } from "../../firebaseConfig";
 import Total from "../../components/total/Total";
+import Navbar from "../../components/navbar/Navbar";
+import BarChart from "../../components/chart/Chart";
+
 
 export const Home = ({ signOutUser }) => {
   const auth = getAuth();
@@ -23,11 +26,11 @@ export const Home = ({ signOutUser }) => {
   const [input, setInput] = useState({
     type: "",
   });
-  const [edit,setEdit]= useState(false)
+  const [edit, setEdit] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const [formType, setFormType] = useState("");
   const [expenses, setExpenses] = useState([]);
-  const [selected, setSelected]= useState()
+  const [selected, setSelected] = useState();
   const [total, setTotal] = useState({
     totalIncome: 0,
     totalExpense: 0,
@@ -35,7 +38,6 @@ export const Home = ({ signOutUser }) => {
   const formRef = useRef();
   const userExpenses = collection(db, "users", user.uid, "money");
   const totalRef = collection(db, "users");
-
 
   useEffect(() => {
     const getData = () => {
@@ -65,7 +67,6 @@ export const Home = ({ signOutUser }) => {
     }
   };
   const openForm = (type) => {
- 
     setShowForm((prev) => !prev);
     setFormType(type);
   };
@@ -73,7 +74,7 @@ export const Home = ({ signOutUser }) => {
     if (formRef.current === e.target) {
       setShowForm(false);
       setFormType("");
-      setEdit(false)
+      setEdit(false);
     }
   };
   const addNewItem = async () => {
@@ -104,8 +105,8 @@ export const Home = ({ signOutUser }) => {
   };
 
   const deleteExpense = async (expense) => {
-    const {amount, id,type} = expense
-    const {totalIncome, totalExpense}= total
+    const { amount, id, type } = expense;
+    const { totalIncome, totalExpense } = total;
     const expenseDoc = doc(db, "users", user.uid, "money", expense.id);
     const totalRef = doc(db, "users", user.uid);
     if (expense.type === "Income") {
@@ -114,95 +115,82 @@ export const Home = ({ signOutUser }) => {
     if (expense.type === "Expense") {
       total.totalExpense = total.totalExpense - amount;
     }
-    
+
     await deleteDoc(expenseDoc);
     const newTotal = await setDoc(totalRef, {
       totalIncome: total.totalIncome,
       totalExpense: total.totalExpense,
     });
   };
-  const startEdit = (expense)=>{
-    setEdit(true)
-    openForm(expense.type)
-    setSelected(expense)
-  }
-  const finishEdit= ()=>{
+  const startEdit = (expense) => {
+    setEdit(true);
+    openForm(expense.type);
+    setSelected(expense);
+  };
+  const finishEdit = () => {
+    setEdit(false);
+    setShowForm(false);
+  };
 
-    setEdit(false)
-    setShowForm(false)
-  }
+  const updateExpense = async (selected) => {
+    let editDoc = doc(db, "users", user.uid, "money", selected.id);
+    let totalRef = doc(db, "users", user.uid);
+    let diference = 0;
 
-const updateExpense =  async(selected)=>{
- 
-  let editDoc = doc(db, "users", user.uid, "money", selected.id);
-  let totalRef = doc(db, "users", user.uid);
-  let diference = 0
- 
-  finishEdit()
-  await updateDoc(editDoc,{
-    amount:input.amount || selected.amount,
-    date: input.date || selected.date,
-    note:input.note || selected.note,
-    category: input.category || selected.category,
-    type:selected.type,
-  })
+    finishEdit();
+    await updateDoc(editDoc, {
+      amount: input.amount || selected.amount,
+      date: input.date || selected.date,
+      note: input.note || selected.note,
+      category: input.category || selected.category,
+      type: selected.type,
+    });
 
-  //si existe amount en input
-  if(input.amount){
-    //si el tipo es 'income'
-    if (selected.type === "Income") {
-      
-      if(input.amount > selected.amount){
-        diference = input.amount - selected.amount
-        const newTotal = await setDoc(totalRef, {
-          totalIncome: total.totalIncome + diference,
-          totalExpense: total.totalExpense,
-        });
+    //si existe amount en input
+    if (input.amount) {
+      //si el tipo es 'income'
+      if (selected.type === "Income") {
+        if (input.amount > selected.amount) {
+          diference = input.amount - selected.amount;
+          const newTotal = await setDoc(totalRef, {
+            totalIncome: total.totalIncome + diference,
+            totalExpense: total.totalExpense,
+          });
+        }
+        if (input.amount < selected.amount) {
+          diference = selected.amount - input.amount;
+          const newTotal = await setDoc(totalRef, {
+            totalIncome: total.totalIncome - diference,
+            totalExpense: total.totalExpense,
+          });
+        }
       }
-      if(input.amount < selected.amount){
-        diference =  selected.amount - input.amount 
-        const newTotal = await setDoc(totalRef, {
-          totalIncome: total.totalIncome - diference,
-          totalExpense: total.totalExpense,
-        });
+      //si el tipo es expense
+      if (selected.type === "Expense") {
+        if (input.amount > selected.amount) {
+          diference = input.amount - selected.amount;
+          const newTotal = await setDoc(totalRef, {
+            totalIncome: total.totalIncome,
+            totalExpense: total.totalExpense + diference,
+          });
+        }
+        if (input.amount < selected.amount) {
+          diference = selected.amount - input.amount;
+          const newTotal = await setDoc(totalRef, {
+            totalIncome: total.totalIncome,
+            totalExpense: total.totalExpense - diference,
+          });
+        }
       }
-      
     }
-    //si el tipo es expense
-    if (selected.type === "Expense") {
-      if(input.amount > selected.amount){
-        diference = input.amount - selected.amount
-        const newTotal = await setDoc(totalRef, {
-          totalIncome: total.totalIncome,
-          totalExpense: total.totalExpense + diference,
-        });
-      }
-      if(input.amount < selected.amount){
-        diference =  selected.amount - input.amount 
-        const newTotal = await setDoc(totalRef, {
-          totalIncome: total.totalIncome,
-          totalExpense: total.totalExpense - diference,
-        });
-      }
-     
-    }
-  }
-
-
-
-
-
-}
+  };
   return (
     <div className="home-container">
-      <h1>HOME</h1>
-      <button onClick={signOutUser}>Logout</button>
-      <div className="middle">
-        <div className="total-container">
-          <Total total={total || 0} />
-        </div>
-        <div className="expenses-container">
-          {expenses.map((expense) => (
+      <div className="nav-container">
+      <Navbar />
+      </div>
+      <div className="expenses-container">
+      {expenses.map((expense) => (
             <Expense
               expense={expense}
               key={expense.id}
@@ -211,10 +199,13 @@ const updateExpense =  async(selected)=>{
               startEdit={startEdit}
             />
           ))}
-        </div>
       </div>
-
-      <div className="addBtn-container">
+      <div className="total-container">
+        <Total total={total || 0} />
+      </div>
+      <div className="graph-container"><BarChart /></div>
+      <div className="other-container">Other</div>
+      <div className="buttons-container">
         <AddButton openForm={openForm} />
         <AddButton type={"income"} openForm={openForm} />
       </div>
@@ -234,5 +225,45 @@ const updateExpense =  async(selected)=>{
         />
       ) : null}
     </div>
+    // <div className="home-container">
+    //   <h1>HOME</h1>
+    //   <button onClick={signOutUser}>Logout</button>
+    //   <div className="middle">
+    //     <div className="total-container">
+    //       <Total total={total || 0} />
+    //     </div>
+    //     <div className="expenses-container">
+    //       {expenses.map((expense) => (
+    //         <Expense
+    //           expense={expense}
+    //           key={expense.id}
+    //           deleteExpense={deleteExpense}
+    //           edit={edit}
+    //           startEdit={startEdit}
+    //         />
+    //       ))}
+    //     </div>
+    //   </div>
+
+    //   <div className="addBtn-container">
+    //     <AddButton openForm={openForm} />
+    //     <AddButton type={"income"} openForm={openForm} />
+    //   </div>
+    //   {showForm ? (
+    //     <NewExpenseForm
+    //       formType={formType}
+    //       closeForm={closeForm}
+    //       formRef={formRef}
+    //       openForm={openForm}
+    //       handleChange={handleChange}
+    //       input={input}
+    //       addNewItem={addNewItem}
+    //       selected={selected}
+    //       edit={edit}
+    //       finishEdit={finishEdit}
+    //       updateExpense={updateExpense}
+    //     />
+    //   ) : null}
+    // </div>
   );
 };

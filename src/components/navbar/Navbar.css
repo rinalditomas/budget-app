@@ -1,0 +1,55 @@
+.navbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+}
+.navbar-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.user-name {
+  color: #f5f3f5;
+}
+.profile-img {
+  margin-top: 2rem;
+  max-width: 6rem;
+  border-radius: 50%;
+  margin-bottom: 2rem;
+}
+.navbar-menu {
+  background-color: #1b264f;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-height: 80vh;
+  border-radius: 20px 20px 0 0;
+  width: 100%;
+  height: 70%;
+  bottom: 0;
+}
+.navbar-menu a {
+  text-decoration: none;
+  color: darkgrey;
+}
+
+.menu-icon {
+  font-size: 1.2rem;
+  margin-right: 0.5rem;
+}
+
+.menu-option {
+  width: 60%;
+  margin-top: 2rem;
+  display: flex;
+  font-size: 0.8rem;
+  color: darkgrey;
+}
+
+.menu-option:hover,
+.menu-option a:hover {
+  color: #f5f3f5;
+}
